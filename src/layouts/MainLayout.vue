@@ -26,7 +26,9 @@
       </div>
     </q-header>
 
-    <q-page-container>
+    <q-page-container
+      style="padding-top: 102px; padding-right: 10%; padding-left: 10%"
+    >
       <router-view />
     </q-page-container>
   </q-layout>
