@@ -229,16 +229,6 @@
       </div>
     </div>
   </div>
-
-  <q-page-sticky position="bottom-right" :offset="[-30, 200]">
-    <q-btn
-      class="rotate-270"
-      fab
-      icon="support"
-      color="primary"
-      label="Feedback"
-    />
-  </q-page-sticky>
 </template>
 
 <script>

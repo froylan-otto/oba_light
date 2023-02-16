@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf" style="background: #e3f6f5">
     <q-header class="bg-primary text-white" height-hint="98">
       <q-toolbar>
-        <q-toolbar-title align="center"> OTTITO Light </q-toolbar-title>
+        <q-toolbar-title align="center"> OTTO Light </q-toolbar-title>
       </q-toolbar>
 
       <!-- <q-tabs align="center">
@@ -20,13 +20,7 @@
         <div class="row justify-center text-center q-pt-lg">
           <div class="col-11 self-center">
             <q-btn-group push unelevated>
-              <q-btn
-                color="primary"
-                text-color="white"
-                push
-                label="Home"
-                active
-              />
+              <q-btn color="primary" text-color="white" push label="Home" />
               <q-btn color="primary" text-color="white" push label="Files" />
             </q-btn-group>
           </div>
@@ -35,7 +29,7 @@
               <q-menu auto-close>
                 <q-list style="min-width: 100px">
                   <q-item clickable>
-                    <q-item-section>Account</q-item-section>
+                    <q-item-section to="/account">Account</q-item-section>
                   </q-item>
                   <q-item clickable>
                     <q-item-section>Settings</q-item-section>
@@ -57,6 +51,38 @@
     >
       <router-view />
     </q-page-container>
+
+    <q-page-sticky position="bottom-right" :offset="[-30, 200]">
+      <q-btn
+        class="rotate-270"
+        fab
+        icon="support"
+        color="primary"
+        label="Feedback"
+      />
+    </q-page-sticky>
+
+    <q-dialog v-model="prompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Your address</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input
+            dense
+            v-model="address"
+            autofocus
+            @keyup.enter="prompt = false"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Add address" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -75,6 +101,10 @@ export default defineComponent({
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
+      clickTo() {
+        router.push({ path: "/" });
+      },
+      feedback: ref(),
     };
   },
 });
