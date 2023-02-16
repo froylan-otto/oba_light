@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-xl">
     <div class="row">
       <div class="q-pl-sm col-3"></div>
 
@@ -75,7 +75,7 @@
                 </q-select>
               </div>
               <div class="col-5 self-center q-pl-lg">
-                <q-input outlined v-model="fxRate" label="FX Rate" />
+                <q-input v-model="fxRate" label="FX Rate" />
               </div>
               <div class="col-2 self-center">
                 <q-btn
@@ -95,9 +95,7 @@
                   :rows="rows"
                   :columns="columns"
                   row-key="name"
-                  dense
                   separator="cell"
-                  hide-header
                   hide-bottom
                 />
               </div>
@@ -128,14 +126,12 @@
           >
             <div class="row justify-center text-center q-pt-lg">
               <div class="col-12 self-center">
-                Files Uploaded
                 <q-table
-                  title="FX Rates"
+                  title="Files Uploaded"
                   :rows="rowsFiles"
                   :columns="columnsFiles"
                   dense
                   separator="cell"
-                  hide-header
                   hide-bottom
                 />
               </div>
@@ -143,7 +139,6 @@
 
             <div class="row justify-center text-center q-pt-lg">
               <div class="col-6 self-center">
-                FX Rates
                 <q-table
                   title="FX Rates"
                   :rows="rows"
@@ -151,23 +146,62 @@
                   row-key="name"
                   dense
                   separator="cell"
-                  hide-header
                   hide-bottom
                 />
               </div>
               <div class="col-6 self-center">
-                Match sales with your Catalogue: TRUE
-                <q-separator />
-                Run as production: TRUE
+                <label> Match sales with your catalogue: <b> YES </b> </label>
+                <div v-html="hoverText"></div>
+                <label> Run as production: <b> YES </b> </label>
               </div>
             </div>
           </q-step>
 
           <q-step :name="5" title="Production" icon="bolt">
-            Try out different ad text to see what brings in the most customers,
-            and learn how to enhance your ads using features like ad extensions.
-            If you run into any problems with your ads, find out how to tell if
-            they're running and how to resolve approval issues.
+            <label class="q-pb-xl"
+              >If you want the information with which this report was generated
+              not to be deleted in a cetain period of time, run it in production
+              mode.
+            </label>
+
+            <q-table
+              title="Reports"
+              :rows="dataa"
+              :columns="columnss"
+              row-key="name"
+              dense
+              separator="cell"
+              hide-bottom
+            >
+              <template v-slot:body="props">
+                <q-tr :props="props">
+                  <q-td key="name" :props="props">
+                    {{ props.row.name }}
+                  </q-td>
+                  <q-td key="size" :props="props">
+                    <q-badge color="purple">
+                      {{ props.row.size }}
+                    </q-badge>
+                  </q-td>
+                  <q-td key="actions" :props="props">
+                    <q-btn color="primary" icon="download" outline />
+                    |
+                    <q-btn color="primary" icon="email" outline />
+                  </q-td>
+                </q-tr>
+              </template>
+            </q-table>
+
+            <div class="row justify-right q-pt-md">
+              <div class="col-9 self-center"></div>
+              <div class="col-3 self-center">
+                <q-btn
+                  color="primary"
+                  icon="sync"
+                  label="Production mode"
+                ></q-btn>
+              </div>
+            </div>
           </q-step>
 
           <template v-slot:navigation>
@@ -185,7 +219,7 @@
                 <q-btn
                   @click="$refs.stepper.next()"
                   color="primary"
-                  :label="step === 5 ? 'COMPLETE' : 'next'"
+                  :label="step === 5 ? 'Finish' : 'next'"
                   :icon="step === 5 ? 'file_upload' : 'redo'"
                 />
               </q-stepper-navigation>
@@ -195,6 +229,16 @@
       </div>
     </div>
   </div>
+
+  <q-page-sticky position="bottom-right" :offset="[-30, 200]">
+    <q-btn
+      class="rotate-270"
+      fab
+      icon="support"
+      color="primary"
+      label="Feedback"
+    />
+  </q-page-sticky>
 </template>
 
 <script>
@@ -247,34 +291,37 @@ export default {
       rows: ref([]),
       gdriveUrl: ref(),
       sanitization: ref(false),
-
-      columnsFiles: ref([
+      columnss: ref([
         {
           name: "name",
           required: true,
-          label: "name",
-          field: (row) => row.name,
+          label: "Name",
           align: "center",
+          field: (row) => row.name,
+          sortable: true,
         },
+
         {
           name: "size",
-          required: true,
-          label: "size",
-          field: (row) => row.size,
+          label: "Size",
+          field: "size",
+          sortable: true,
           align: "center",
         },
         {
-          name: "status",
-          required: true,
-          label: "status",
-          field: (row) => row.status,
+          name: "actions",
           align: "center",
+          label: "actions",
+          field: "actions",
+          sortable: true,
         },
       ]),
 
-      rowsFiles: ref([
-        { name: "file1.csv", size: "300mb", status: "Ingested" },
-        { name: "file2.csv", size: "35mb", status: "Ingested" },
+      dataa: ref([
+        {
+          name: "report.csv",
+          size: "50 MB",
+        },
       ]),
     };
   },
@@ -294,7 +341,12 @@ export default {
     },
     fileUploadOption() {
       console.log("Algo");
-      //console.log(event);
+    },
+    dowloadReport() {
+      console.log("Action to dowload the generated report");
+    },
+    sendEmail() {
+      console.log("Action to send to email the generated report");
     },
   },
 };
