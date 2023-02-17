@@ -40,6 +40,10 @@
                     :url="dummyUrl"
                     self-center
                     v-if="typeFile == 'file'"
+                    label="CSV Files Supported"
+                    accept="
+                    .csv,
+                    text/csv"
                   />
 
                   <q-input
@@ -233,10 +237,16 @@
 
 <script>
 import { ref } from "vue";
+import { useQuasar } from "quasar";
+
+import { Notify } from "quasar";
 
 export default {
   setup() {
     return {
+      framework: {
+        plugins: ["Notify"],
+      },
       step: ref(1),
       dummyUrl: "https://api.imgur.com/3/image",
       serverSideImages: [
@@ -322,12 +332,31 @@ export default {
     },
     selectTypeFile() {},
     addRate() {
-      console.log(this.fxOption);
       this.ratesAdded.push(this.fxRate);
       this.ratesOptionsAdded.push(this.fxOption);
-      console.log(this.fxRate);
 
-      this.rows.push({ rate: this.fxOption, value: this.fxRate });
+      //Se agregan el Rate y su cantidad a una nueva fila de la tabla
+
+      let existe = 0;
+      let posicion = -1;
+      for (let i = 0; i < this.rows.length; i++) {
+        if (this.rows[i].rate === this.fxOption) {
+          existe = 1;
+          posicion = i;
+          break;
+        }
+      }
+
+      if (existe == 0) {
+        this.rows.push({ rate: this.fxOption, value: this.fxRate });
+      } else {
+        /*this.$q.notify({
+          type: "positive",
+          position: "center",
+          message: "The organization was successfully registered.!",
+        });*/
+        console.log("The rate is already added");
+      }
     },
     fileUploadOption() {
       console.log("Algo");

@@ -59,27 +59,38 @@
         icon="support"
         color="primary"
         label="Feedback"
+        @click="feedback = true"
       />
     </q-page-sticky>
 
-    <q-dialog v-model="prompt" persistent>
-      <q-card style="min-width: 350px">
+    <q-dialog v-model="feedback" persistent>
+      <q-card style="width: 700px; max-width: 80vw">
         <q-card-section>
-          <div class="text-h6">Your address</div>
+          <div class="text-h6">Feedback Window</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
+          <q-select
+            outlined
+            v-model="selectedQuestion"
+            :options="questions"
+            label="Outlined"
+          />
+
+          <q-input class="q-pt-sm" outlined v-model="subject" label="Subject" />
+
           <q-input
-            dense
-            v-model="address"
-            autofocus
-            @keyup.enter="prompt = false"
+            v-model="issue"
+            outlined
+            type="textarea"
+            label="Describe your issue"
+            class="q-pt-sm"
           />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add address" v-close-popup />
+          <q-btn flat label="Close" v-close-popup />
+          <q-btn flat label="Send" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -94,10 +105,16 @@ export default defineComponent({
   name: "MainLayout",
 
   setup() {
-    const leftDrawerOpen = ref(false);
-
     return {
-      leftDrawerOpen,
+      questions: [
+        "Process question",
+        "Technical Problem / Bug",
+        "Improvement / Feature request",
+        "Other / General",
+      ],
+      subject: "",
+      selectedQuestion: ref(""),
+      issue: "",
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
