@@ -68,6 +68,8 @@
 
 <script>
 import { ref } from "vue";
+import { useCounterStore } from "stores/counter";
+import { storeToRefs } from "pinia";
 
 export default {
   setup() {
