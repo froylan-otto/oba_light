@@ -10,13 +10,10 @@
 
                 <q-form class="q-px-sm q-pt-xl">
                   <q-input
-                    ref="email"
                     square
                     clearable
-                    v-model="email"
+                    v-model="form.username"
                     type="email"
-                    lazy-rules
-                    :rules="[this.required, this.isEmail, this.short]"
                     label="Email"
                   >
                     <template v-slot:prepend>
@@ -25,24 +22,14 @@
                   </q-input>
 
                   <q-input
-                    ref="password"
                     square
                     clearable
-                    v-model="password"
-                    :type="passwordFieldType"
-                    lazy-rules
-                    :rules="[this.required, this.short]"
+                    v-model="form.password"
+                    type="password"
                     label="Password"
                   >
                     <template v-slot:prepend>
                       <q-icon name="lock" />
-                    </template>
-                    <template v-slot:append>
-                      <q-icon
-                        :name="visibilityIcon"
-                        @click="switchVisibility"
-                        class="cursor-pointer"
-                      />
                     </template>
                   </q-input>
                 </q-form>
@@ -59,6 +46,20 @@
                 />
               </q-card-actions>
             </q-card>
+
+            <div>
+              <!-- Option 2 -->
+              <div>Indirect store</div>
+              <!-- Use the computed state -->
+              <div>{{ count }}</div>
+              <!-- Use the computed getter -->
+              <div>{{ doubleCountValue }}</div>
+
+              <!-- Use the exposed function -->
+              <q-btn @click="decrementCount()">-</q-btn>
+              <!-- Use the exposed function -->
+              <q-btn @click="incrementCount()">+</q-btn>
+            </div>
           </div>
         </div>
       </q-page>
@@ -68,19 +69,82 @@
 
 <script>
 import { ref } from "vue";
-import { useCounterStore } from "stores/counter";
+import { useCounterStore } from "stores/auth";
 import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
 export default {
-  setup() {
-    const rightDrawerOpen = ref(false);
+  name: "loginPage",
+  data() {
+    const store = useCounterStore();
+
+    // Option 2: use computed and functions to use the store
+    const count = computed(() => store.counter);
+    const doubleCountValue = computed(() => store.doubleCount);
+    const incrementCount = () => store.increment(); // use action
+    const decrementCount = () => store.counter--; // manipulate directly
 
     return {
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value;
+      // Option 1: return the store directly and couple it in the template
+      store,
+
+      // Option 2: use the store in functions and compute the state to use in the template
+      count,
+      doubleCountValue,
+      incrementCount,
+      decrementCount,
+      form: {
+        username: "",
+        password: "",
       },
     };
+  },
+  methods: {
+    async submit() {
+      this.btnAction = true;
+      if (!this.form.username || !this.form.password) {
+        console.log("something wrong");
+      } else if (this.form.password.length < 6) {
+        console.log("password length");
+      } else {
+        console.log("Is auth: " + this.store.authenticatedOAS);
+
+        await this.store.dispatch("loginApiOas", this.form);
+
+        /*try {
+          this.working = true;
+          this.apiOas.defaults.headers.common.Authorization = "";
+          await this.$store.dispatch("xstore/loginApiOas", this.form);
+          console.log("this.working " + this.working);
+          if (!this.$store.getters["xstore/isAuthenticatedOAS"]) {
+            this.error = true;
+            this.alert = "error";
+            return;
+          }
+          await this.$store.dispatch(
+            "xstore/updateAppVersion",
+            this.appVersion
+          );
+          const tokenOAS = this.$store.getters["xstore/getTokenOAS"];
+          this.apiOas.defaults.headers.common.Authorization =
+            "Bearer " + tokenOAS;
+          console.log("ttolen oas: " + tokenOAS);
+          // end token oas
+          const homePage = this.$store.getters["xstore/getHomePage"];
+          console.log("La ruta es: " + homePage);
+          await this.$router.push({ name: homePage });
+          console.log("La ruta es: " + homePage);
+        } catch (err) {
+          this.error = true;
+          this.alert = "error";
+          this.form.username = "";
+          this.form.password = "";
+          this.btnAction = false;
+        } finally {
+          this.working = false;
+        }*/
+      }
+    },
   },
 };
 </script>
