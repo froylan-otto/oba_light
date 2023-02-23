@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { apiOas } from "boot/axios";
+import axios from "axios";
 
 export const useCounterStore = defineStore("counter", {
   state: () => ({
@@ -67,6 +68,11 @@ export const useCounterStore = defineStore("counter", {
     updateAppVersion(context, payload) {
       context.commit("setClientVersion", payload);
     },
+    async loggearse(payload) {
+      const output = await apiOas.post("/auth/login/", payload);
+      const response = output.data;
+    },
+
     async loginApiOas(context, payload) {
       const output = await apiOas.post("/auth/login/", payload);
       const response = output.data;

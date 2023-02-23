@@ -18,13 +18,14 @@ export default boot(({ app, store }) => {
   app.config.globalProperties.apiOas = apiOas;
   app.config.globalProperties.apiOas.defaults.headers.get["Content-Type"] =
     "application/json";
+  app.config.globalProperties.apiOas.defaults.headers.post["Content-Type"] =
+    "application/x-www-form-urlencoded";
   app.config.globalProperties.apiOas.defaults.headers.get.Accept =
     "application/json";
   app.config.globalProperties.apiOas.defaults.headers.common["otto-api-key"] =
     clientApiKey;
 
   if (authStore.isAuthenticatedOAS) {
-    console.log("Is logged in");
     app.config.globalProperties.apiOas.defaults.headers.common.Authorization =
       "Bearer " + authStore.getTokenOAS;
   } else {

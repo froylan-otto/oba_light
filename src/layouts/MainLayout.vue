@@ -5,12 +5,6 @@
         <q-toolbar-title align="center"> OTTO Light </q-toolbar-title>
       </q-toolbar>
 
-      <!-- <q-tabs align="center">
-        <q-route-tab to="/page1" label="Page One" />
-        <q-route-tab to="/page2" label="Page Two" />
-        <q-route-tab to="/page3" label="Page Three" />
-      </q-tabs> -->
-
       <div
         class="bg-secondary"
         align="center"
@@ -20,7 +14,13 @@
         <div class="row justify-center text-center q-pt-lg">
           <div class="col-11 self-center">
             <q-btn-group push unelevated>
-              <q-btn color="primary" text-color="white" push label="Home" />
+              <q-btn
+                @click="redirectHomePage"
+                color="primary"
+                text-color="white"
+                push
+                label="Home"
+              />
               <q-btn color="primary" text-color="white" push label="Files" />
             </q-btn-group>
           </div>
@@ -29,10 +29,9 @@
               <q-menu auto-close>
                 <q-list style="min-width: 100px">
                   <q-item clickable>
-                    <q-item-section to="/account">Account</q-item-section>
-                  </q-item>
-                  <q-item clickable>
-                    <q-item-section>Settings</q-item-section>
+                    <q-item-section @click="redirectSettingsPage"
+                      >Settings</q-item-section
+                    >
                   </q-item>
 
                   <q-item clickable>
@@ -123,6 +122,16 @@ export default defineComponent({
       },
       feedback: ref(),
     };
+  },
+  methods: {
+    redirectSettingsPage() {
+      console.log("Se ha clickeado al boton settings");
+      this.$router.push("/settings");
+    },
+    redirectHomePage() {
+      console.log("Se ha clickeado al boton de home ");
+      this.$router.push("/upload");
+    },
   },
 });
 </script>

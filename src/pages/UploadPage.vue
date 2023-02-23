@@ -1,9 +1,12 @@
 <template>
   <div class="q-pa-xl">
     <div class="row">
-      <div class="q-pl-sm col-3"></div>
-
       <div class="col-12">
+        <q-card class="my-card">
+          <q-card-section class="bg-primary text-white">
+            <div class="text-h6">File uploader</div>
+          </q-card-section>
+        </q-card>
         <q-stepper
           v-model="step"
           ref="stepper"

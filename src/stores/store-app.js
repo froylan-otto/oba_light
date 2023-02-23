@@ -108,6 +108,27 @@ const actions = {
   updateAppVersion(context, payload) {
     context.commit("setClientVersion", payload);
   },
+  async loggearse(payload) {
+    //const output = await apiOas.post("/auth/login/", payload);
+
+    /*const output = await apiOas.get("/salesfiles");
+    const response = output.data;
+    console.log(response);*/
+    axios
+      .get("https://oas-dev.ottomate.me/api/auth/login/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + "a319b7095a412b8ea6706c94eddd5b51d9dfde4e",
+        },
+      })
+      .then((response) => {
+        console.log("response", response.data);
+      })
+      .catch((error) => {
+        alert("error", error.response);
+        dispatch(userUpdateProfileFail());
+      });
+  },
   async loginApiOas(context, payload) {
     const output = await apiOas.post("/auth/login/", payload);
     const response = output.data;

@@ -72,6 +72,7 @@ import { ref } from "vue";
 import { useCounterStore } from "stores/auth";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import axios from "axios";
 
 export default {
   name: "loginPage",
@@ -109,7 +110,33 @@ export default {
       } else {
         console.log("Is auth: " + this.store.authenticatedOAS);
 
-        await this.store.dispatch("loginApiOas", this.form);
+        axios
+          .post(
+            "https://oas-dev.ottomate.me/api/auth/login/",
+            {
+              username: "string",
+              email: "user@example.com",
+              password: "string",
+            },
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization:
+                  "Bearer " + "e5bc57dbbe3f84734735899958b73261a9fabb38",
+              },
+            }
+          )
+          .then((response) => {
+            console.log("response", response.data);
+          })
+          .catch((error) => {
+            alert("error", error.response);
+          });
+
+        //const output = await this.store.loginApiOas(this.form);
+        //const output = await this.store.loggearse(this.form);
+        //const response = output.data;
+        //console.log(response);
 
         /*try {
           this.working = true;
